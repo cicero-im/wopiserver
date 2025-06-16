@@ -127,8 +127,7 @@ wopiheaders['TokenHeader'] = revatoken
 if appname == 'CodiMD' or appname == 'Etherpad':
     wopiheaders['ApiKey'] = apikey
 print("Input parameters: %s\n" % wopiparams)
-wopiopeninapp = requests.get(wopiurl + '/wopi/iop/openinapp', verify=False,
-                             headers=wopiheaders, params=wopiparams)
+wopiopeninapp = requests.get(wopiurl + '/wopi/iop/openinapp', verify=True, headers=wopiheaders, params=wopiparams)
 if wopiopeninapp.status_code != 200:
     print('WOPI open request failed:\n%s' % wopiopeninapp.content.decode())
     sys.exit(-1)
