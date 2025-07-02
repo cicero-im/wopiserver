@@ -14,6 +14,7 @@ import urllib.parse as urlparse
 import requests
 import bridge.wopiclient as wopic
 import core.wopiutils as utils
+from security import safe_requests
 
 # initialized by the main class or by the init method
 appurl = None
@@ -138,7 +139,7 @@ def _fetchfrometherpad(wopilock, acctok):
     '''Fetch a given document from from Etherpad, raise AppFailure in case of errors'''
     try:
         # this operation does not use the API (and it is NOT protected by the API key!), so we use a plain GET
-        res = requests.get(appurl + '/p' + wopilock['doc'] + '/export/etherpad',
+        res = safe_requests.get(appurl + '/p' + wopilock['doc'] + '/export/etherpad',
                            verify=sslverify,
                            timeout=10)
         if res.status_code != http.client.OK:

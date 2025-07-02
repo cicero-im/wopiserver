@@ -17,6 +17,7 @@ import http.client
 import requests
 import bridge.wopiclient as wopic
 import core.wopiutils as utils
+from security import safe_requests
 
 TOOLARGE = 'File is too large to be edited in CodiMD. Please reduce its size with a regular text editor and try again.'
 
@@ -121,7 +122,7 @@ def _unzipattachments(inputbuf):
 def _fetchfromcodimd(wopilock, acctok):
     '''Fetch a given document from from CodiMD, raise AppFailure in case of errors'''
     try:
-        res = requests.get(appurl + ('/' if wopilock['doc'][0] != '/' else '') + wopilock['doc'] + '/download',
+        res = safe_requests.get(appurl + ('/' if wopilock['doc'][0] != '/' else '') + wopilock['doc'] + '/download',
                            verify=sslverify, timeout=10)
         if res.status_code != http.client.OK:
             log.error('msg="Unable to fetch document from CodiMD" token="%s" response="%d: %s"' %
@@ -226,7 +227,7 @@ def _getattachments(mddoc, docfilename, forcezip=False):
     for attachment in upload_re.findall(mddoc):
         log.debug(f'msg="Fetching attachment" url="{attachment}"')
         try:
-            res = requests.get(appurl + attachment, verify=sslverify, timeout=10)
+            res = safe_requests.get(appurl + attachment, verify=sslverify, timeout=10)
             if res.status_code != http.client.OK:
                 raise ValueError(res.status_code)
         except (requests.exceptions.RequestException, ValueError) as e:

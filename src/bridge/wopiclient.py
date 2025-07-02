@@ -11,6 +11,7 @@ import hashlib
 import http.client
 import requests
 from flask import Response
+from security import safe_requests
 
 
 class InvalidLock(Exception):
@@ -38,7 +39,7 @@ def request(wopisrc, acctok, method, contents=None, headers=None):
         log.debug('msg="Calling WOPI" url="%s" headers="%s" acctok="%s" ssl="%s"' %
                   (wopiurl, headers, acctok[-20:], sslverify))
         if method == 'GET':
-            return requests.get(f'{wopiurl}?access_token={acctok}', verify=sslverify, timeout=10)
+            return safe_requests.get(f'{wopiurl}?access_token={acctok}', verify=sslverify, timeout=10)
         if method == 'POST':
             return requests.post(f'{wopiurl}?access_token={acctok}', verify=sslverify,
                                  headers=headers, data=contents, timeout=10)
