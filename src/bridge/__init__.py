@@ -79,7 +79,7 @@ class WB:
                 inturl = config.get('general', f'{app}inturl', fallback=None)
                 try:
                     with open(f'/var/run/secrets/{app}_apikey', encoding='utf-8') as f:
-                        apikey = f.readline().strip('\n')
+                        apikey = f.readline(5_000_000).strip('\n')
                 except FileNotFoundError:
                     apikey = None
                 cls.loadplugin(app, url, inturl, apikey)
