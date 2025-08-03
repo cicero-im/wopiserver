@@ -12,7 +12,6 @@ import time
 import traceback
 import json
 from enum import Enum
-from random import choice
 from string import ascii_lowercase
 from datetime import datetime
 from base64 import b64encode, b64decode
@@ -23,6 +22,7 @@ import flask
 import jwt
 from werkzeug.utils import secure_filename
 import core.commoniface as common
+import secrets
 
 # this is the xattr key used for conflicts resolution on the remote storage
 LASTSAVETIMEKEY = 'iop.wopi.lastwritetime'
@@ -208,7 +208,7 @@ def getMicrosoftOfficeLockName(filename):
 
 def randomString(size):
     '''One liner to get a random string of letters'''
-    return ''.join([choice(ascii_lowercase) for _ in range(size)])
+    return ''.join([secrets.choice(ascii_lowercase) for _ in range(size)])
 
 
 def generateAccessToken(userid, fileid, viewmode, user, folderurl, endpoint, app, trace):
