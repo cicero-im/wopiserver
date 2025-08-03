@@ -10,13 +10,13 @@ import os
 import re
 import zipfile
 import io
-from random import randint
 import json
 import urllib.parse as urlparse
 import http.client
 import requests
 import bridge.wopiclient as wopic
 import core.wopiutils as utils
+import secrets
 
 TOOLARGE = 'File is too large to be edited in CodiMD. Please reduce its size with a regular text editor and try again.'
 
@@ -97,7 +97,7 @@ def _unzipattachments(inputbuf):
                     log.warning(f'msg="Attachment collision detected" filename="{fname}"')
                     # append a random letter to the filename
                     name, ext = os.path.splitext(fname)
-                    fname = name + '_' + chr(randint(65, 65+26)) + ext
+                    fname = name + '_' + chr(secrets.SystemRandom().randint(65, 65+26)) + ext
                     # and replace its reference in the document (this creates a copy of the doc, not very efficient)
                     mddoc = mddoc.replace(bytes(zipinfo.filename), bytes(fname))
                 # OK, let's upload

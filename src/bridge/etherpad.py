@@ -5,8 +5,6 @@ The Etherpad-specific code used by the WOPI bridge.
 
 Main author: Giuseppe.LoPresti@cern.ch, CERN/IT-ST
 '''
-
-from random import choice
 from string import ascii_lowercase
 import json
 import http.client
@@ -14,6 +12,7 @@ import urllib.parse as urlparse
 import requests
 import bridge.wopiclient as wopic
 import core.wopiutils as utils
+import secrets
 
 # initialized by the main class or by the init method
 appurl = None
@@ -106,7 +105,7 @@ def loadfromstorage(filemd, wopisrc, acctok, docid):
         epfile = b'{}'
     try:
         if not docid:
-            docid = ''.join([choice(ascii_lowercase) for _ in range(20)])
+            docid = ''.join([secrets.choice(ascii_lowercase) for _ in range(20)])
             log.debug(f'msg="Generated random padID for read-only document" padid="{docid}" token="{acctok[-20:]}"')
         # first drop previous pad if it exists
         _apicall('deletePad', {'padID': docid}, acctok=acctok, raiseonnonzerocode=False)
